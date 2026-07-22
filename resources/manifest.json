@@ -1,0 +1,16 @@
+{
+  "schema_version": "yuwen-courseware.learning-resources/v1",
+  "distribution_license": "PLRL-1.0",
+  "resources": [
+    {
+      "id": "original-installation-sample-v1",
+      "title": "《窗边的纸飞机》安装学习示例",
+      "path": "learning/窗边的纸飞机-安装学习示例.md",
+      "owner": "yuwen-courseware 权利人及贡献者",
+      "source_kind": "original",
+      "license": "PLRL-1.0",
+      "allowed_use": "个人学习、研究、评估与非商业备课参考",
+      "not_for": "教材替代、课堂成品直接交付、再分发或商业使用"
+    }
+  ]
+}

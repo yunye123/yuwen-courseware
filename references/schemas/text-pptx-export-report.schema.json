@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://yuwen-courseware.local/schemas/text-pptx-export-report.schema.json",
+  "title": "yuwen-courseware deterministic text PPTX export report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "ok",
+    "created_at",
+    "path_base",
+    "bundle",
+    "commit",
+    "source",
+    "approval",
+    "artifact",
+    "tools",
+    "lineage"
+  ],
+  "properties": {
+    "schema_version": {"const": "yuwen-courseware.text-pptx-export/v1"},
+    "ok": {"const": true},
+    "created_at": {"type": "string", "format": "date-time"},
+    "path_base": {"const": "export-bundle-directory"},
+    "bundle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "path_kind"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "path_kind": {"const": "output-relative"}
+      }
+    },
+    "commit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "complete"],
+      "properties": {
+        "mode": {"const": "atomic-directory-rename"},
+        "complete": {"const": true}
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "path_kind", "sha256", "size", "frozen_during_export"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "path_kind": {"const": "basename-only"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "size": {"type": "integer", "minimum": 0},
+        "frozen_during_export": {"const": true}
+      }
+    },
+    "approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "path_kind", "sha256", "size", "approval_id"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "path_kind": {"const": "report-relative"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "size": {"type": "integer", "minimum": 0},
+        "approval_id": {"type": "string", "minLength": 1}
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256",
+        "size",
+        "slide_count",
+        "slide_width_emu",
+        "slide_height_emu",
+        "font"
+      ],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "size": {"type": "integer", "minimum": 1},
+        "slide_count": {"type": "integer", "minimum": 1},
+        "slide_width_emu": {"const": 12192000},
+        "slide_height_emu": {"const": 6858000},
+        "font": {"const": "Source Han Serif SC"}
+      }
+    },
+    "tools": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["python", "python_pptx"],
+      "properties": {
+        "python": {"type": "string", "minLength": 1},
+        "python_pptx": {"type": "string", "minLength": 1}
+      }
+    },
+    "lineage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["description", "layout_policy"],
+      "properties": {
+        "description": {"type": "string", "minLength": 1},
+        "layout_policy": {"const": "16:9-white-black-no-autoshrink"}
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

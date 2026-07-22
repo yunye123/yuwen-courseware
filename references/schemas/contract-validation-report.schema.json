@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://yuwen-courseware.local/schemas/contract-validation-report.schema.json",
+  "title": "yuwen-courseware deterministic contract validation report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "record_type",
+    "ok",
+    "validator",
+    "mode",
+    "lesson_id",
+    "counts",
+    "artifact_hashes",
+    "text_contract_sha256",
+    "ppt_structured_sha256",
+    "ppt_text_sha256",
+    "issues"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "record_type": {"const": "contract-validation-report"},
+    "ok": {"type": "boolean"},
+    "validator": {"const": "yuwen-courseware-text-contract-v1"},
+    "mode": {"enum": ["text", "ppt"]},
+    "lesson_id": {
+      "oneOf": [
+        {"type": "null"},
+        {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"}
+      ]
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["objectives", "materials", "tasks", "assessments", "answers", "scripts", "slides"],
+      "properties": {
+        "objectives": {"type": "integer", "minimum": 0},
+        "materials": {"type": "integer", "minimum": 0},
+        "tasks": {"type": "integer", "minimum": 0},
+        "assessments": {"type": "integer", "minimum": 0},
+        "answers": {"type": "integer", "minimum": 0},
+        "scripts": {"type": "integer", "minimum": 0},
+        "slides": {"type": "integer", "minimum": 0}
+      }
+    },
+    "artifact_hashes": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["teaching-design", "student-handout", "teacher-answer", "teaching-script"],
+          "properties": {
+            "teaching-design": {"$ref": "#/$defs/sha256"},
+            "student-handout": {"$ref": "#/$defs/sha256"},
+            "teacher-answer": {"$ref": "#/$defs/sha256"},
+            "teaching-script": {"$ref": "#/$defs/sha256"}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["teaching-design", "teaching-script"],
+          "properties": {
+            "teaching-design": {"$ref": "#/$defs/sha256"},
+            "teaching-script": {"$ref": "#/$defs/sha256"}
+          }
+        }
+      ]
+    },
+    "text_contract_sha256": {"$ref": "#/$defs/sha256"},
+    "ppt_structured_sha256": {
+      "oneOf": [{"type": "null"}, {"$ref": "#/$defs/sha256"}]
+    },
+    "ppt_text_sha256": {
+      "oneOf": [{"type": "null"}, {"$ref": "#/$defs/sha256"}]
+    },
+    "issues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["code", "path", "message"],
+        "properties": {
+          "code": {"type": "string", "minLength": 1},
+          "path": {"type": "string", "minLength": 1},
+          "message": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"ok": {"const": true}}, "required": ["ok"]},
+      "then": {"properties": {"issues": {"maxItems": 0}}},
+      "else": {"properties": {"issues": {"minItems": 1}}}
+    },
+    {
+      "if": {"properties": {"mode": {"const": "text"}}, "required": ["mode"]},
+      "then": {
+        "properties": {
+          "ppt_structured_sha256": {"type": "null"},
+          "ppt_text_sha256": {"type": "null"}
+        }
+      },
+      "else": {
+        "properties": {
+          "ppt_structured_sha256": {"$ref": "#/$defs/sha256"},
+          "ppt_text_sha256": {"$ref": "#/$defs/sha256"}
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

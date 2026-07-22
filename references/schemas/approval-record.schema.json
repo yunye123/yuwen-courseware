@@ -1,0 +1,696 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://yuwen-courseware.local/schemas/approval-record.schema.json",
+  "title": "Yuwen Courseware Immutable Workflow Record",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/legacyAdoption"
+    },
+    {
+      "$ref": "#/$defs/onlineQualityReview"
+    },
+    {
+      "$ref": "#/$defs/userStageApproval"
+    },
+    {
+      "$ref": "#/$defs/stageInvalidation"
+    },
+    {
+      "$ref": "#/$defs/userRevisionConfirmation"
+    },
+    {
+      "$ref": "#/$defs/userConfirmation"
+    },
+    {
+      "$ref": "#/$defs/userBatchConfirmation"
+    }
+  ],
+  "$defs": {
+    "legacyAdoption": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "record_type",
+        "lesson_id",
+        "initial_stage",
+        "status",
+        "user_id",
+        "reason",
+        "adopted_at",
+        "artifacts"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "1.0"
+        },
+        "record_type": {
+          "const": "legacy-adoption"
+        },
+        "lesson_id": {
+          "$ref": "#/$defs/lessonId"
+        },
+        "initial_stage": {
+          "$ref": "#/$defs/stage"
+        },
+        "status": {
+          "enum": [
+            "draft",
+            "review",
+            "invalidated"
+          ]
+        },
+        "user_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "reason": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "adopted_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "artifacts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/roleBoundFile"
+          }
+        }
+      }
+    },
+    "onlineQualityReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "record_type",
+        "review_id",
+        "lesson_id",
+        "stage",
+        "reviewer_type",
+        "reviewer_id",
+        "route_id",
+        "provider",
+        "model",
+        "runtime_mode",
+        "run_id",
+        "persona_version",
+        "prompt_version",
+        "verdict",
+        "comment",
+        "reviewed_at",
+        "inputs",
+        "report",
+        "quote_check_report"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "1.0"
+        },
+        "record_type": {
+          "const": "online-quality-review"
+        },
+        "review_id": {
+          "type": "string",
+          "pattern": "^review-[a-f0-9]{32}$"
+        },
+        "lesson_id": {
+          "$ref": "#/$defs/lessonId"
+        },
+        "stage": {
+          "$ref": "#/$defs/stage"
+        },
+        "reviewer_type": {
+          "const": "ai"
+        },
+        "reviewer_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "route_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "provider": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "model": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "runtime_mode": {
+          "const": "online"
+        },
+        "run_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "persona_version": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "prompt_version": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "verdict": {
+          "enum": [
+            "pass",
+            "fail"
+          ]
+        },
+        "comment": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "reviewed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "inputs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/roleBoundFile"
+          }
+        },
+        "report": {
+          "$ref": "#/$defs/fileReference"
+        },
+        "quote_check_report": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/fileReference"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "userStageApproval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "record_type",
+        "approval_id",
+        "lesson_id",
+        "stage",
+        "stage_index",
+        "expected_revision",
+        "resulting_revision",
+        "approved_at",
+        "user_id",
+        "comment",
+        "limits",
+        "next_stage",
+        "inputs",
+        "confirmation",
+        "quality_reviews"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "1.0"
+        },
+        "record_type": {
+          "const": "user-stage-approval"
+        },
+        "approval_id": {
+          "type": "string",
+          "pattern": "^r[0-9]{4,}-[a-z0-9-]+$"
+        },
+        "lesson_id": {
+          "$ref": "#/$defs/lessonId"
+        },
+        "stage": {
+          "$ref": "#/$defs/stage"
+        },
+        "stage_index": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 11
+        },
+        "expected_revision": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "resulting_revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "approved_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "user_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "comment": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "limits": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        },
+        "next_stage": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/stage"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "inputs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/roleBoundFile"
+          }
+        },
+        "confirmation": {
+          "$ref": "#/$defs/fileReference"
+        },
+        "confirmation_mode": {
+          "enum": [
+            "single",
+            "batch"
+          ]
+        },
+        "confirmation_stages": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/stage"
+          }
+        },
+        "quality_reviews": {
+          "type": "array",
+          "maxItems": 2,
+          "items": {
+            "$ref": "#/$defs/qualityReviewReference"
+          }
+        },
+        "rebuild": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/rebuildReference"
+            }
+          ]
+        }
+      }
+    },
+    "stageInvalidation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "record_type",
+        "invalidation_id",
+        "lesson_id",
+        "target_stage",
+        "target_stage_index",
+        "expected_revision",
+        "resulting_revision",
+        "invalidated_at",
+        "user_id",
+        "reason",
+        "inputs",
+        "confirmation",
+        "invalidated_approval_ids"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "1.0"
+        },
+        "record_type": {
+          "const": "stage-invalidation"
+        },
+        "invalidation_id": {
+          "type": "string",
+          "pattern": "^r[0-9]{4,}-invalidate-[a-z0-9-]+$"
+        },
+        "lesson_id": {
+          "$ref": "#/$defs/lessonId"
+        },
+        "target_stage": {
+          "$ref": "#/$defs/stage"
+        },
+        "target_stage_index": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 11
+        },
+        "expected_revision": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "resulting_revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "invalidated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "user_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "reason": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "inputs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/roleBoundFile"
+          }
+        },
+        "confirmation": {
+          "$ref": "#/$defs/fileReference"
+        },
+        "invalidated_approval_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^r[0-9]{4,}-[a-z0-9-]+$"
+          }
+        }
+      }
+    },
+    "userRevisionConfirmation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_type",
+        "lesson_id",
+        "stage",
+        "user_id",
+        "decision",
+        "source",
+        "host",
+        "conversation_id",
+        "message_id",
+        "confirmed_at",
+        "decision_text",
+        "reason"
+      ],
+      "properties": {
+        "record_type": {
+          "const": "user-revision-confirmation"
+        },
+        "lesson_id": {
+          "$ref": "#/$defs/lessonId"
+        },
+        "stage": {
+          "$ref": "#/$defs/stage"
+        },
+        "user_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "decision": {
+          "const": "revise"
+        },
+        "source": {
+          "const": "host-conversation"
+        },
+        "host": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "conversation_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "message_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "confirmed_at": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "decision_text": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "reason": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "userConfirmation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_type",
+        "lesson_id",
+        "stage",
+        "user_id",
+        "decision",
+        "source",
+        "host",
+        "conversation_id",
+        "message_id",
+        "confirmed_at",
+        "decision_text"
+      ],
+      "properties": {
+        "record_type": {
+          "const": "user-confirmation"
+        },
+        "lesson_id": {
+          "$ref": "#/$defs/lessonId"
+        },
+        "stage": {
+          "$ref": "#/$defs/stage"
+        },
+        "user_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "decision": {
+          "const": "approve"
+        },
+        "source": {
+          "const": "host-conversation"
+        },
+        "host": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "conversation_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "message_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "confirmed_at": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "decision_text": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "resource_choice": {
+          "enum": ["ppt-only", "handout"]
+        }
+      }
+    },
+    "userBatchConfirmation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_type",
+        "lesson_id",
+        "stages",
+        "user_id",
+        "decision",
+        "source",
+        "host",
+        "conversation_id",
+        "message_id",
+        "confirmed_at",
+        "decision_text"
+      ],
+      "properties": {
+        "record_type": {
+          "const": "user-batch-confirmation"
+        },
+        "lesson_id": {
+          "$ref": "#/$defs/lessonId"
+        },
+        "stages": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/stage"
+          }
+        },
+        "user_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "decision": {
+          "const": "approve"
+        },
+        "source": {
+          "const": "host-conversation"
+        },
+        "host": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "conversation_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "message_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "confirmed_at": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "decision_text": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "rebuildReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "content_unchanged",
+        "inherited_approval_id"
+      ],
+      "properties": {
+        "content_unchanged": {
+          "const": true
+        },
+        "inherited_approval_id": {
+          "type": "string",
+          "pattern": "^r[0-9]{4,}-[a-z0-9-]+$"
+        }
+      }
+    },
+    "roleBoundFile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "path",
+        "sha256",
+        "size"
+      ],
+      "properties": {
+        "role": {
+          "$ref": "#/$defs/role"
+        },
+        "path": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "fileReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256",
+        "size"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "qualityReviewReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "file",
+        "snapshot_sha256",
+        "review_id",
+        "reviewer_id",
+        "route_id",
+        "run_id",
+        "report_path"
+      ],
+      "properties": {
+        "file": {
+          "type": "string",
+          "pattern": "^reviews/[A-Za-z0-9._-]+\\.json$"
+        },
+        "snapshot_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "review_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "reviewer_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "route_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "run_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "report_path": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "lessonId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+    },
+    "role": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"
+    },
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "nullableString": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "stage": {
+      "enum": [
+        "lesson-brief",
+        "research-plan",
+        "evidence-dossier",
+        "stance-selection",
+        "route-freeze",
+        "teaching-design",
+        "student-resources",
+        "teaching-script",
+        "text-contract",
+        "ppt-text",
+        "external-ppt-check",
+        "release"
+      ]
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  }
+}

@@ -1,0 +1,208 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://yuwen-courseware.local/schemas/text-contract.schema.json",
+  "title": "yuwen-courseware text contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "record_type",
+    "lesson_id",
+    "status",
+    "generated_at",
+    "artifacts",
+    "objectives",
+    "materials",
+    "tasks",
+    "assessments",
+    "answers",
+    "scripts"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "record_type": {"const": "text-contract"},
+    "lesson_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"},
+    "status": {"enum": ["draft", "review", "approved", "invalidated"]},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "mode": {"enum": ["handout", "ppt-only"]},
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "teaching-design": {"$ref": "#/$defs/artifactBinding"},
+        "student-handout": {"$ref": "#/$defs/artifactBinding"},
+        "teacher-answer": {"$ref": "#/$defs/artifactBinding"},
+        "teaching-script": {"$ref": "#/$defs/artifactBinding"}
+      }
+    },
+    "objectives": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/objective"}
+    },
+    "materials": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/material"}
+    },
+    "tasks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/task"}
+    },
+    "assessments": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/assessment"}
+    },
+    "answers": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/answer"}
+    },
+    "scripts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/script"}
+    }
+  },
+  "oneOf": [
+    {
+      "required": ["mode"],
+      "properties": {
+        "mode": {"const": "ppt-only"},
+        "artifacts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["teaching-design", "teaching-script"],
+          "properties": {
+            "teaching-design": {"$ref": "#/$defs/artifactBinding"},
+            "teaching-script": {"$ref": "#/$defs/artifactBinding"}
+          }
+        }
+      }
+    },
+    {
+      "properties": {
+        "mode": {"const": "handout"},
+        "artifacts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["teaching-design", "student-handout", "teacher-answer", "teaching-script"],
+          "properties": {
+            "teaching-design": {"$ref": "#/$defs/artifactBinding"},
+            "student-handout": {"$ref": "#/$defs/artifactBinding"},
+            "teacher-answer": {"$ref": "#/$defs/artifactBinding"},
+            "teaching-script": {"$ref": "#/$defs/artifactBinding"}
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "id": {
+      "type": "string",
+      "pattern": "^(OBJ|MAT|TASK|ASM|ANS|SCRIPT)-[0-9]{2,}$"
+    },
+    "idList": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/id"}
+    },
+    "artifactBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sha256", "ids"],
+      "properties": {
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "ids": {"$ref": "#/$defs/idList"}
+      }
+    },
+    "objective": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["objective_id"],
+      "properties": {
+        "objective_id": {"type": "string", "pattern": "^OBJ-[0-9]{2,}$"}
+      }
+    },
+    "material": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["material_id", "source_ids", "rights_status"],
+      "properties": {
+        "material_id": {"type": "string", "pattern": "^MAT-[0-9]{2,}$"},
+        "source_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "rights_status": {
+          "enum": ["user-provided", "licensed", "public-domain", "link-only", "unknown"]
+        }
+      }
+    },
+    "task": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["task_id", "objective_ids", "material_ids", "assessment_ids", "ppt_required"],
+      "properties": {
+        "task_id": {"type": "string", "pattern": "^TASK-[0-9]{2,}$"},
+        "objective_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^OBJ-[0-9]{2,}$"}
+        },
+        "material_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^MAT-[0-9]{2,}$"}
+        },
+        "assessment_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^ASM-[0-9]{2,}$"}
+        },
+        "ppt_required": {"type": "boolean"}
+      }
+    },
+    "assessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["assessment_id", "task_id", "objective_ids", "answer_id"],
+      "properties": {
+        "assessment_id": {"type": "string", "pattern": "^ASM-[0-9]{2,}$"},
+        "task_id": {"type": "string", "pattern": "^TASK-[0-9]{2,}$"},
+        "objective_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^OBJ-[0-9]{2,}$"}
+        },
+        "answer_id": {"type": "string", "pattern": "^ANS-[0-9]{2,}$"}
+      }
+    },
+    "answer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["answer_id", "assessment_id"],
+      "properties": {
+        "answer_id": {"type": "string", "pattern": "^ANS-[0-9]{2,}$"},
+        "assessment_id": {"type": "string", "pattern": "^ASM-[0-9]{2,}$"}
+      }
+    },
+    "script": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["script_id", "task_id"],
+      "properties": {
+        "script_id": {"type": "string", "pattern": "^SCRIPT-[0-9]{2,}$"},
+        "task_id": {"type": "string", "pattern": "^TASK-[0-9]{2,}$"}
+      }
+    }
+  }
+}

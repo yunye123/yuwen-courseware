@@ -1,0 +1,288 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://yuwen-courseware.local/schemas/lesson-state.schema.json",
+  "title": "Yuwen Courseware Lesson State",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "lesson_id",
+    "revision",
+    "initial_stage",
+    "current_stage",
+    "current_stage_index",
+    "status",
+    "origin",
+    "adoption",
+    "artifacts",
+    "approvals",
+    "created_at",
+    "updated_at"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "lesson_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "initial_stage": {
+      "$ref": "#/$defs/stage"
+    },
+    "current_stage": {
+      "$ref": "#/$defs/stage"
+    },
+    "current_stage_index": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 11
+    },
+    "status": {
+      "enum": [
+        "draft",
+        "review",
+        "approved",
+        "invalidated"
+      ]
+    },
+    "origin": {
+      "enum": [
+        "new",
+        "adopted"
+      ]
+    },
+    "adoption": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/adoptionReference"
+        }
+      ]
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "role",
+          "path",
+          "sha256",
+          "size",
+          "registered_at"
+        ],
+        "properties": {
+          "role": {
+            "$ref": "#/$defs/role"
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "$ref": "#/$defs/sha256"
+          },
+          "size": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "registered_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    "approvals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "approval_id",
+          "stage",
+          "revision",
+          "approved_at",
+          "file",
+          "snapshot_sha256"
+        ],
+        "properties": {
+          "approval_id": {
+            "type": "string",
+            "pattern": "^r[0-9]{4,}-[a-z0-9-]+$"
+          },
+          "stage": {
+            "$ref": "#/$defs/stage"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "approved_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "file": {
+            "type": "string",
+            "pattern": "^approvals/[A-Za-z0-9._-]+\\.json$"
+          },
+          "snapshot_sha256": {
+            "$ref": "#/$defs/sha256"
+          }
+        }
+      }
+    },
+    "invalidations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/invalidationReference"
+      }
+    },
+    "active_approval_ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^r[0-9]{4,}-[a-z0-9-]+$"
+      }
+    },
+    "contract_gate_enforced_after_revision": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "origin": {
+            "const": "new"
+          }
+        },
+        "required": [
+          "origin"
+        ]
+      },
+      "then": {
+        "properties": {
+          "adoption": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "origin": {
+            "const": "adopted"
+          }
+        },
+        "required": [
+          "origin"
+        ]
+      },
+      "then": {
+        "properties": {
+          "adoption": {
+            "$ref": "#/$defs/adoptionReference"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "adoptionReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "file",
+        "snapshot_sha256"
+      ],
+      "properties": {
+        "file": {
+          "type": "string",
+          "pattern": "^adoptions/[A-Za-z0-9._-]+\\.json$"
+        },
+        "snapshot_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "invalidationReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "invalidation_id",
+        "target_stage",
+        "revision",
+        "invalidated_at",
+        "file",
+        "snapshot_sha256"
+      ],
+      "properties": {
+        "invalidation_id": {
+          "type": "string",
+          "pattern": "^r[0-9]{4,}-invalidate-[a-z0-9-]+$"
+        },
+        "target_stage": {
+          "$ref": "#/$defs/stage"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "invalidated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "file": {
+          "type": "string",
+          "pattern": "^invalidations/[A-Za-z0-9._-]+\\.json$"
+        },
+        "snapshot_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "role": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"
+    },
+    "stage": {
+      "enum": [
+        "lesson-brief",
+        "research-plan",
+        "evidence-dossier",
+        "stance-selection",
+        "route-freeze",
+        "teaching-design",
+        "student-resources",
+        "teaching-script",
+        "text-contract",
+        "ppt-text",
+        "external-ppt-check",
+        "release"
+      ]
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  }
+}

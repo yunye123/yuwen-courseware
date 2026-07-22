@@ -1,0 +1,18 @@
+yuwen-courseware public core edition
+
+This repository does not bundle textbooks, curriculum standards, teacher
+cases, student data, fonts, model weights, images, audio, video, Office/WPS,
+or other third-party teaching materials. Users remain responsible for having
+the rights to every source they provide or use with the Skill.
+
+The core runtime scripts use the Python standard library except
+`scripts/export_text_pptx.py`, which requires the separately installed
+`python-pptx` package. The package is not redistributed here and remains
+subject to its own license. The PPTX exporter also expects a locally installed
+font named Source Han Serif SC; the font is not bundled or licensed by this
+repository.
+
+This notice describes third-party materials and dependencies only. The
+repository's own code, documents, templates and self-authored examples are
+governed by the separate personal-learning license in LICENSE; that license
+does not grant rights to third-party content.

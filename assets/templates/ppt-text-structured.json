@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "record_type": "ppt-text",
+  "lesson_id": "replace-me",
+  "status": "draft",
+  "generated_at": "1970-01-01T00:00:00Z",
+  "text_contract_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "ppt_text_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "slides": [
+    {
+      "slide_id": "SLIDE-01",
+      "page": 1,
+      "title": "PLACEHOLDER",
+      "screen_text": "PLACEHOLDER",
+      "teacher_notes": "PLACEHOLDER",
+      "task_id": "TASK-01",
+      "objective_ids": ["OBJ-01"],
+      "script_ids": ["SCRIPT-01"],
+      "answer_ids": [],
+      "reveal_state": "neutral"
+    },
+    {
+      "slide_id": "SLIDE-02",
+      "page": 2,
+      "title": "PLACEHOLDER",
+      "screen_text": "问题：\nPLACEHOLDER\n\n活动：\nPLACEHOLDER\n\n时间：\nPLACEHOLDER\n\n成果：\nPLACEHOLDER\n\n交流：\nPLACEHOLDER",
+      "teacher_notes": "PLACEHOLDER",
+      "task_id": "TASK-01",
+      "objective_ids": ["OBJ-01"],
+      "script_ids": ["SCRIPT-01"],
+      "answer_ids": [],
+      "reveal_state": "prompt"
+    }
+  ]
+}
