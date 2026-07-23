@@ -7,21 +7,21 @@
 
 ## 文本合同门
 
-教学设计与逐字稿完成后进入本门。课堂选择学案时，学生学案与教师参考答案也必须已成对完成。
+教学设计与授课导航稿完成后进入本门。课堂选择学案时，学生学案与教师参考答案也必须已成对完成。
 
-`text-contract.json` 是跨文件内容哈希的唯一绑定点。学生学案、教师答案和逐字稿正文只记录上游批准记录，不互抄彼此文件哈希；因此单个文件的机械修订不会仅为更新头部哈希而级联改写其他正文。
+`text-contract.json` 是跨文件内容哈希的唯一绑定点。学生学案、教师答案和授课导航稿正文只记录上游批准记录，不互抄彼此文件哈希；因此单个文件的机械修订不会仅为更新头部哈希而级联改写其他正文。
 
 1. 复制 `assets/templates/text-contract.json` 到课例目录，替换示例值。
 2. 根据老师在教学设计阶段的决定选模式：无学案使用 `mode: "ppt-only"`，有学案使用 `mode: "handout"`。旧课例没有 `mode` 时只按历史 `handout` 口径兼容。
-3. `ppt-only` 的 `artifacts` 只绑定教学设计和逐字稿；`handout` 另加学生学案和教师参考答案，两者不得缺一。每个角色记录冻结文件的 SHA-256 和实际出现的稳定 ID。
-4. 建立目标、材料、任务、评价、答案和讲稿块的显式关系；材料必须记录来源 ID 与权利状态。`ppt-only` 中每个课堂任务都必须 `ppt_required=true`，逐字稿必须覆盖任务、评价、答案与讲稿块。
+3. `ppt-only` 的 `artifacts` 只绑定教学设计和授课导航稿；`handout` 另加学生学案和教师参考答案，两者不得缺一。每个角色记录冻结文件的 SHA-256 和实际出现的稳定 ID。
+4. 建立目标、材料、任务、评价、答案和讲稿块的显式关系；材料必须记录来源 ID 与权利状态。`ppt-only` 中每个课堂任务都必须 `ppt_required=true`，授课导航稿必须覆盖任务、评价、答案与讲稿块。
 5. 按模式运行。无学案路线：
 
 ```text
 <PYTHON> scripts/validate_text_contract.py text \
   --contract <text-contract.json> \
   --artifact teaching-design=<教学设计.md> \
-  --artifact teaching-script=<逐字稿.md> \
+  --artifact teaching-script=<授课导航稿.md> \
   --report <新的不可变校验报告.json>
 ```
 
@@ -60,7 +60,7 @@
   --contract <已批准 text-contract.json> \
   --ppt-json <ppt-text-structured.json> \
   --artifact teaching-design=<教学设计.md> \
-  --artifact teaching-script=<逐字稿.md> \
+  --artifact teaching-script=<授课导航稿.md> \
   --artifact ppt-text=<PPT逐页文字粗稿.md> \
   --report <新的不可变校验报告.json>
 ```

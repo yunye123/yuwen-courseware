@@ -84,13 +84,13 @@ class LessonWorkflowContractTest(unittest.TestCase):
             SKILL_ROOT / "references" / "workflows" / "lesson-preparation.md"
         ).read_text(encoding="utf-8")
 
-        self.assertIn("教学设计未批准，不得生成学案、逐字稿或白底 PPT", workflow)
+        self.assertIn("教学设计未批准，不得生成学案、授课导航稿或白底 PPT", workflow)
         self.assertLess(
             workflow.index("第一段：教学设计闭环"),
-            workflow.index("第二段：逐字稿与可选学生资源"),
+            workflow.index("第二段：授课导航稿与可选学生资源"),
         )
         self.assertLess(
-            workflow.index("第二段：逐字稿与可选学生资源"),
+            workflow.index("第二段：授课导航稿与可选学生资源"),
             workflow.index("第三段：白底课堂课件"),
         )
 
@@ -119,7 +119,7 @@ class LessonWorkflowContractTest(unittest.TestCase):
             SKILL_ROOT / "assets" / "templates" / "06-ppt-text-draft.md"
         ).read_text(encoding="utf-8")
 
-        self.assertIn("默认交付中文教学设计、授课逐字稿与白底可编辑 PPT", skill)
+        self.assertIn("常态课默认交付课堂主线与问题链、日常教学设计、授课导航稿与白底可编辑 PPT", skill)
         self.assertIn("白底黑字、文字可编辑、带教师备注的课堂 PPTX", workflow)
         self.assertIn("scripts/export_text_pptx.py", workflow)
         self.assertNotIn("提供确定性纯文字 PPTX 导出，不做视觉设计、图片、动画与美化模板", skill)
@@ -203,6 +203,8 @@ class LessonWorkflowContractTest(unittest.TestCase):
         self.assertIn("一页课堂导航", script)
         self.assertIn("学生可能说", script)
         self.assertIn("超时处理", script)
+        for phrase in ("半成品回答或典型误答", "抽样方式", "何时停止", "无设备或无额外准备"):
+            self.assertIn(phrase, design)
 
     def test_external_ppt_does_not_block_skill_package_completion(self) -> None:
         workflow = (
