@@ -16,7 +16,7 @@ Normal public changes use a short-lived `codex/<scope>` branch and a Draft PR. D
 1. Start from a clean public checkout, update `main` with `git pull --ff-only origin main`, then create `codex/<scope>`.
 2. Manually import only a reviewed public allowlist. Never copy a private `.git` directory, private history, textbooks, curriculum text, teacher cases, generated deliverables, benchmarks or local machine data.
 3. Stage explicit paths only. Before committing, run the checks in [CONTRIBUTING.md](CONTRIBUTING.md), inspect the staged diff, and confirm that the allowlist and licensing evidence still match the change.
-4. Push only the branch and open or update a Draft PR against `main`. A maintainer must explicitly review it before merge.
+4. Push only the branch and open or update a Draft PR against `main`. The `public verify` workflow must pass; a maintainer must explicitly review it before merge.
 
 After a PR is merged, update local `main` from `origin/main`, create one annotated public tag on that merged commit, and push that tag explicitly. Never use `git push --tags`.
 
