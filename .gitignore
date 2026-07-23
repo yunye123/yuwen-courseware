@@ -9,6 +9,7 @@ _data/
 output/
 outputs/
 release/
+validation/real-teacher-trials/data/
 *.pptx
 *.pdf
 *.docx
