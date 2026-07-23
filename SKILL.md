@@ -17,6 +17,7 @@ description: 基于使用者合法提供或可公开核验的教材、课标、�
 - `references/workflows/teacher-ready-content.md`：教学设计、逐字稿和板书达到什么标准；
 - `references/workflows/lesson-preparation.md`：课例怎样可靠推进；
 - `references/workflows/teaching-design-decision-review.md`：教学设计怎样在成稿前做内部反证审查；
+- `references/workflows/text-contract-validation.md`：教学设计、逐字稿与课件怎样保持一致；
 - `references/workflows/source-materials-and-history.md`：怎样使用老师提供的资料与个人历史资产。
 
 上述文件都必须遵守。事实核查、引文核对和跨成品一致性继续在后台执行；老师只看语文教学成果和自然中文结论。

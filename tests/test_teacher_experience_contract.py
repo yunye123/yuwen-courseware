@@ -8,11 +8,14 @@ SKILL_ROOT = Path(__file__).resolve().parents[1]
 class TeacherExperienceContractTest(unittest.TestCase):
     def test_skill_requires_a_subject_teacher_voice_and_hides_backend_language(self) -> None:
         skill = (SKILL_ROOT / "SKILL.md").read_text(encoding="utf-8")
+        interaction = (
+            SKILL_ROOT / "references" / "workflows" / "teacher-interaction.md"
+        ).read_text(encoding="utf-8")
 
         self.assertIn("专业高中语文教师的学科语言", skill)
         self.assertIn("不以“作为 AI/大模型”开场", skill)
         for term in ("文本合同", "技术冻结", "哈希绑定", "占位语检测", "权利状态"):
-            self.assertIn(term, skill)
+            self.assertIn(term, interaction)
         self.assertIn("严禁在老师可见界面出现", skill)
 
     def test_interaction_uses_host_choices_with_a_short_numbered_fallback(self) -> None:

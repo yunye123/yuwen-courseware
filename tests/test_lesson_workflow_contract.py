@@ -29,27 +29,32 @@ class LessonWorkflowContractTest(unittest.TestCase):
 
     def test_skill_routes_real_lessons_to_the_staged_workflow(self) -> None:
         skill = (SKILL_ROOT / "SKILL.md").read_text(encoding="utf-8")
+        workflow = (
+            SKILL_ROOT / "references" / "workflows" / "lesson-preparation.md"
+        ).read_text(encoding="utf-8")
 
         self.assertIn("references/workflows/teacher-interaction.md", skill)
         self.assertIn("references/workflows/teacher-ready-content.md", skill)
         self.assertIn("references/workflows/lesson-preparation.md", skill)
-        self.assertIn("scripts/lesson_state.py", skill)
         self.assertIn("references/workflows/text-contract-validation.md", skill)
-        self.assertIn("status", skill)
-        self.assertIn("verify", skill)
-        self.assertIn("approve", skill)
-        self.assertIn("教学设计获得老师确认", skill)
+        for operation in ("status", "verify", "approve"):
+            self.assertIn(f"scripts/lesson_state.py {operation}", workflow)
+        self.assertIn("教学设计完成后默认进入确认状态", skill)
+        self.assertIn("未经老师确认，不自动生成逐字稿或 PPT", skill)
         self.assertIn("白底 PPT 逐页内容与导出", skill)
 
     def test_skill_has_a_chinese_teacher_communication_contract(self) -> None:
         skill = (SKILL_ROOT / "SKILL.md").read_text(encoding="utf-8")
+        interaction = (
+            SKILL_ROOT / "references" / "workflows" / "teacher-interaction.md"
+        ).read_text(encoding="utf-8")
 
         self.assertIn("## 教师沟通规范", skill)
         self.assertIn("全程使用专业高中语文教师的学科语言", skill)
         self.assertIn("严禁在老师可见界面出现", skill)
         self.assertIn("有按钮、选项卡、表单或对话框能力时直接调用", skill)
         self.assertIn("每次请老师确认前都先给完整教师版文件", skill)
-        self.assertIn("问题与活动已经一一对应", skill)
+        self.assertIn("问题与活动已经一一对应", interaction)
 
     def test_all_human_facing_templates_use_chinese_labels_and_numbering(self) -> None:
         forbidden_labels = (
