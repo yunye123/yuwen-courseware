@@ -8,6 +8,7 @@ __pycache__/
 _data/
 output/
 release/
+validation/real-teacher-trials/data/
 *.pptx
 *.pdf
 *.docx
