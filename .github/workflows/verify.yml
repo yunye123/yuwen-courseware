@@ -1,0 +1,36 @@
+name: public verify
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+      - name: Install declared test dependencies
+        run: python -m pip install --disable-pip-version-check -r requirements-dev.txt
+      - name: Run public contract checks
+        run: |
+          python -B -m unittest discover -s tests -q
+          python -B -m compileall -q scripts tests
+          if rg -n -i 'references/[k]nowledge|references/teaching-[p]atterns|production-case-[r]euse|knowledge_[l]ibrary\.py|assets/[b]enchmarks|private-self[-]use|/[U]sers/|/[V]olumes/' . --glob '!.git/**' --glob '!tests/**'; then
+            echo "Public-boundary scan found a protected reference."
+            exit 1
+          fi
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            git diff --check "${{ github.event.pull_request.base.sha }}" HEAD
+          else
+            git diff --check HEAD^ HEAD
+          fi

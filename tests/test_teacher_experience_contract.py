@@ -8,11 +8,14 @@ SKILL_ROOT = Path(__file__).resolve().parents[1]
 class TeacherExperienceContractTest(unittest.TestCase):
     def test_skill_requires_a_subject_teacher_voice_and_hides_backend_language(self) -> None:
         skill = (SKILL_ROOT / "SKILL.md").read_text(encoding="utf-8")
+        interaction = (
+            SKILL_ROOT / "references" / "workflows" / "teacher-interaction.md"
+        ).read_text(encoding="utf-8")
 
         self.assertIn("专业高中语文教师的学科语言", skill)
         self.assertIn("不以“作为 AI/大模型”开场", skill)
         for term in ("文本合同", "技术冻结", "哈希绑定", "占位语检测", "权利状态"):
-            self.assertIn(term, skill)
+            self.assertIn(term, interaction)
         self.assertIn("严禁在老师可见界面出现", skill)
 
     def test_interaction_uses_host_choices_with_a_short_numbered_fallback(self) -> None:
@@ -57,14 +60,15 @@ class TeacherExperienceContractTest(unittest.TestCase):
         ).read_text(encoding="utf-8")
 
         for filename in (
-            "《课名》教学设计.md",
-            "《课名》授课逐字稿.md",
+            "《课名》课堂主线与问题链.md",
+            "《课名》日常教学设计.md",
+            "《课名》授课导航稿.md",
             "《课名》白底课件.pptx",
         ):
             self.assertIn(filename, interaction)
         self.assertIn("学案不是默认必做", interaction)
         self.assertIn("阶段 6 和阶段 10 可选", workflow)
-        self.assertIn("直接进入逐字稿", workflow)
+        self.assertIn("直接进入授课导航稿", workflow)
 
     def test_no_handout_route_keeps_questions_and_activities_on_slides(self) -> None:
         skill = (SKILL_ROOT / "SKILL.md").read_text(encoding="utf-8")
@@ -88,9 +92,10 @@ class TeacherExperienceContractTest(unittest.TestCase):
     def test_openai_interface_uses_teacher_facing_product_language(self) -> None:
         interface = (SKILL_ROOT / "agents" / "openai.yaml").read_text(encoding="utf-8")
 
-        self.assertIn("共备详实教学设计", interface)
-        self.assertIn("教学设计、可打印逐字稿、可视化板书和白底课件", interface)
-        self.assertIn("学案根据课堂需要再决定", interface)
+        self.assertIn("共备一节高中语文常态课", interface)
+        self.assertIn("一页课堂主线与问题链", interface)
+        self.assertIn("日常教学设计、授课导航稿、可视化板书和白底课件", interface)
+        self.assertIn("完整逐字稿与学案按课堂需要再决定", interface)
         self.assertNotIn("当前批准阶段", interface)
         self.assertNotIn("PPT逐页文字稿", interface)
 
@@ -133,6 +138,17 @@ class TeacherExperienceContractTest(unittest.TestCase):
         self.assertIn("停：", script)
         self.assertIn("超时处理", script)
         self.assertIn("不得附“质量审查摘要”", interaction)
+
+    def test_normal_lesson_starts_with_one_visible_mainline_card(self) -> None:
+        skill = (SKILL_ROOT / "SKILL.md").read_text(encoding="utf-8")
+        interaction = (
+            SKILL_ROOT / "references" / "workflows" / "teacher-interaction.md"
+        ).read_text(encoding="utf-8")
+
+        self.assertIn("默认进入常态课", skill)
+        self.assertIn("一页课堂主线与问题链", skill)
+        self.assertIn("最小开课信息", interaction)
+        self.assertIn("方向确认后", interaction)
 
 
 if __name__ == "__main__":

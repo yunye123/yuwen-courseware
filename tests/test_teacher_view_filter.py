@@ -367,7 +367,7 @@ OBJ-01 引导学生概括诗歌的情感层次。
         expected_content = {
             "00-lesson-brief.md": ("学生学习诊断", "常见误解", "学生表现"),
             "01-research-dossier.md": ("资料出处与课堂用途", "文本解读与教学结论", "不同解释"),
-            "02-teaching-design.md": ("教学立意与整课框架", "学生行动与关键预设", "空间预览"),
+            "02-teaching-design.md": ("本课只攻一处", "核心达成", "文字空间预览"),
             "03-student-handout.md": ("学习目标", "课堂任务", "证据要求"),
             "04-teacher-answer.md": ("参考答案与评价依据", "评分点", "可接受的不同答案"),
             "05-teaching-script.md": ("一页课堂导航", "学生可能说", "课堂机动速查"),

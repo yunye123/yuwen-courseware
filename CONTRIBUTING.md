@@ -7,10 +7,13 @@ Do not contribute textbooks, curriculum-standard full text, teacher cases, class
 Before opening a pull request, run:
 
 ```bash
-python3 -m unittest discover -s tests -q
-rg -n 'references/[k]nowledge|assets/[b]enchmarks|private-self[-]use|/[U]sers/' . --glob '!.git/**'
+python3 -B -m unittest discover -s tests -q
+python3 -B -m py_compile scripts/check.py scripts/teacher_view_filter.py scripts/verify_install.py
+rg -n -i 'references/[k]nowledge|references/teaching-[p]atterns|production-case-[r]euse|knowledge_[l]ibrary\.py|assets/[b]enchmarks|private-self[-]use|/[U]sers/|/[V]olumes/' . --glob '!.git/**' --glob '!tests/**'
+git diff --check
+git diff --cached --check
 ```
 
-The scan must have no findings. Keep changes focused, document any new external dependency, and do not add binaries without maintainer approval.
+The scan must have no findings. Keep changes focused, document any new external dependency, and do not add binaries without maintainer approval. PRs default to Draft; only a maintainer may approve a merge to `main`.
 
 Do not submit content under a license that conflicts with the personal-learning, no-redistribution or non-commercial restrictions of this repository.
