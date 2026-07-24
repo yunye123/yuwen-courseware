@@ -36,7 +36,7 @@ class PublicReleaseContractTest(unittest.TestCase):
             "授课导航稿",
             "白底可编辑 PPTX",
             "完整逐字稿、学案和教师参考答案按课堂需要生成",
-            "不能把模型记忆当作引文或教材事实",
+            "而不是凭模型记忆补写引文或生成虚假完整成品",
             "`scripts/verify_install.py`",
         ):
             with self.subTest(phrase=phrase):

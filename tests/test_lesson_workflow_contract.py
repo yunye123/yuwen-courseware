@@ -39,7 +39,6 @@ class LessonWorkflowContractTest(unittest.TestCase):
         self.assertIn("references/workflows/text-contract-validation.md", skill)
         for operation in ("status", "verify", "approve"):
             self.assertIn(f"scripts/lesson_state.py {operation}", workflow)
-        self.assertIn("教学设计完成后默认进入确认状态", skill)
         self.assertIn("教学设计未获老师确认，不生成下游授课导航稿或课件", skill)
         self.assertIn("白底 PPT 逐页内容与导出", skill)
 

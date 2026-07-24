@@ -29,7 +29,7 @@ class PublicTeachingDesignContractTest(unittest.TestCase):
             "零至两个必要支撑",
             "0—2 个必要支撑",
             "直接从文本疑点或核心任务进入更有效时，不另加包装",
-            "教学设计完成后默认进入确认状态",
+            "教学设计未获老师确认，不生成下游授课导航稿或课件",
         ):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, content["skill"])

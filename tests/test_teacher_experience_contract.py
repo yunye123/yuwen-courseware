@@ -147,8 +147,8 @@ class TeacherExperienceContractTest(unittest.TestCase):
 
         self.assertIn("默认进入常态课", skill)
         self.assertIn("一页课堂主线与问题链", skill)
-        self.assertIn("最少开课信息", interaction)
-        self.assertIn("确认方向后", interaction)
+        self.assertIn("最小开课信息", interaction)
+        self.assertIn("方向确认后", interaction)
 
 
 if __name__ == "__main__":
