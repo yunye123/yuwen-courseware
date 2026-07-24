@@ -40,7 +40,7 @@ class LessonWorkflowContractTest(unittest.TestCase):
         for operation in ("status", "verify", "approve"):
             self.assertIn(f"scripts/lesson_state.py {operation}", workflow)
         self.assertIn("教学设计完成后默认进入确认状态", skill)
-        self.assertIn("未经老师确认，不自动生成逐字稿或 PPT", skill)
+        self.assertIn("教学设计未获老师确认，不生成下游授课导航稿或课件", skill)
         self.assertIn("白底 PPT 逐页内容与导出", skill)
 
     def test_skill_has_a_chinese_teacher_communication_contract(self) -> None:
@@ -208,7 +208,7 @@ class LessonWorkflowContractTest(unittest.TestCase):
         self.assertIn("一页课堂导航", script)
         self.assertIn("学生可能说", script)
         self.assertIn("超时处理", script)
-        for phrase in ("半成品回答或典型误答", "抽样方式", "何时停止", "无设备或无额外准备"):
+        for phrase in ("师：", "生：", "预设（误）：", "应对：", "板书随写："):
             self.assertIn(phrase, design)
 
     def test_external_ppt_does_not_block_skill_package_completion(self) -> None:

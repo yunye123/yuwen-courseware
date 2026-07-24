@@ -9,15 +9,15 @@ description: 基于使用者合法提供或可公开核验的教材、课标、�
 
 ## 唯一目标
 
-帮助高中语文老师得到能直接改、直接打印、直接上课的课件资源包。所有研究、编号、状态、审查和一致性校验都只服务于这一目标，不能成为老师的阅读负担。
+帮助高中语文老师得到可核对、可修改、可用于授课准备的课件资源包。所有研究、编号、状态、审查和一致性校验都只服务于这一目标，不能成为老师的阅读负担。
 
 真实课例先完整读取：
 
 - `references/workflows/teacher-interaction.md`：老师在对话中看到什么；
-- `references/workflows/teacher-ready-content.md`：教学设计、逐字稿和板书达到什么标准；
+- `references/workflows/teacher-ready-content.md`：教学设计、授课导航稿、按需完整逐字稿和板书达到什么标准；
 - `references/workflows/lesson-preparation.md`：课例怎样可靠推进；
 - `references/workflows/teaching-design-decision-review.md`：教学设计怎样在成稿前做内部反证审查；
-- `references/workflows/text-contract-validation.md`：教学设计、逐字稿与课件怎样保持一致；
+- `references/workflows/text-contract-validation.md`：教学设计、授课导航稿与课件怎样保持一致；
 - `references/workflows/source-materials-and-history.md`：怎样使用老师提供的资料与个人历史资产。
 
 上述文件都必须遵守。事实核查、引文核对和跨成品一致性继续在后台执行；老师只看语文教学成果和自然中文结论。
@@ -61,7 +61,7 @@ python3 scripts/check.py <教学设计.md>
 
 它只检查机械可判定的成稿合同，不评价教学立意、文本解读深度、问题质量或课堂创新。先通过 `teacher_view_filter.py` 清除 HTML 内部注释，再运行检查器；检查结果只用于内部修改，不进入教师成稿。
 
-以上 v2.1 规则只作用于教学设计生成阶段。教学设计是后续逐字稿和学生可见课件的设计源：不得为了控制篇幅删去核心问题、关键预设或课堂推进逻辑。
+以上 v2.1 规则只作用于教学设计生成阶段。教学设计是后续授课导航稿、按需完整逐字稿和学生可见课件的设计源：不得为了控制篇幅删去核心问题、关键预设或课堂推进逻辑。
 
 ### 常态课与按需成品
 
